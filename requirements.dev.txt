@@ -1,0 +1,6 @@
+"""
+We only need linting for developement, so we build a new requirements file to run in on the local system
+and not use it while deploying the app on the server. In fact, we separate the developement dependencies
+from the actual dependencies.
+"""
+flake8>=3.9.2,<3.10

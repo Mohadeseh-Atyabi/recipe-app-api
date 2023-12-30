@@ -1,0 +1,33 @@
+# The name of this file is optional as long as it is located in the worflow folder and ends in .yml. This is our configuration for our github actions.
+# Starts withh --- to identify that it is a yaml file
+---
+# The name to appear in Github
+name: Checks
+
+# Run this Github action on push
+on: [puth]
+
+jobs:
+  test-lint:
+    # The name is seen within the Github actions interface
+    name: Test and Lint
+    # The runner to run our job on (The OS to run the job)
+    runs-on: ubuntu-20.04
+    # Different things that run for this job
+    steps:
+      # The first step
+      - name: Login to Docker Hub
+        # Use a pre-make Github action which is provided in the Github actions repository
+        uses: docker/login-action@v1
+        with:
+          username: ${{ secrets.DOCKERHUB_USER }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+      # The second action. This action checks our code out inside the Github actions job to make sure that the code is available to run the next step.
+      - name: Checkout
+        uses: actions/checkout@v2
+      # The Third step
+      - name: Test
+        # To run the unit test on our app
+        run: docker-compose run --rm app sh -c "python manage.py test"
+      - name: Lint
+        run: docker-compose run --rm app sh -c "flake8"

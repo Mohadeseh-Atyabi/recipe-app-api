@@ -1,0 +1,19 @@
+# This is a standard style of dockerignore file (exclude these files from docker context)
+
+# Git
+.git    # hidden file
+.gitignore
+
+# Docker
+.docker # hidden file
+
+# Python
+# The pycache file is created after a python file is run, but it may cause problems as it is dependent on the operating system.
+app/__pycache__/
+app/*/__pycache__/
+app/*/*/__pycache__/
+app/*/*/*/__pycache__/
+# No need to copy the local virtual environments as wwe have one in the docker file
+.env/
+.venv/
+venv/

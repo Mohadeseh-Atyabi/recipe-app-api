@@ -1,0 +1,25 @@
+# The version of docker compose we are going to use
+version: "3.9"
+
+# Docker compose has one or more services based on out application
+services:
+  # Name of the service to run the docker file
+  app:
+    # Build the docker file inside the current directory that we are running the docker compose from
+    build:
+      # Specifies the current directory
+      context: .
+      args:
+        # When running this compose file for developement, set the DEV argument as true.
+        - DEV:true
+    # Maps the port on the local machine to the port inside the docker container
+    # It is used to connect to the server
+    ports:
+      - "8000:8000"
+    # Maps the directories from the system into the docker container
+    # It is used to automatically sync the code in the project to the cloud running in the container
+    volumes:
+      - ./app:/app
+    # The default command used to run the service. We can override it while running the docker compose.
+    command: >
+      sh -c "python manage.py runserver 0.0.0.0:8000"
