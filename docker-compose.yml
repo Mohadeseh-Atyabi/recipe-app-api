@@ -23,3 +23,27 @@ services:
     # The default command used to run the service. We can override it while running the docker compose.
     command: >
       sh -c "python manage.py runserver 0.0.0.0:8000"
+    # Define environment variable to enable the app to use the database. They should match the valuse used for the db environments.
+    environment:
+      - DB_HOST=db
+      - DB_NAME=devdb
+      - DB_USER=devuser
+      - DB_PASS=changeme
+    # This determines that the app depends on db and it starts after the db has started earlier. Moreover, if db stops working, docker-compose undrestands that the app will stop working soon, so it shuts down the service as well.
+  
+  # Define the database service
+  db:
+    image: postgres:13-alpine
+    # Define the volume for this db
+    volumes:
+      # Map directory in container to the local machine
+      - dev-db-data:/var/lib/postgresql/data
+    # Set environment variables. These variables set the initial database configuration for new db service. This is not a public database and is just used for local developement.
+    environment:
+      - POSTGRES_DB=devdb
+      - POSTGRES_USER=devuser
+      - POSTGRES_PASSWORD=changeme
+
+volumes:
+  # Define a new volume but don't assign the address to be stored as it is set automatically by docker-compose
+  dev-db-data:
