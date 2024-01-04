@@ -18,6 +18,11 @@ ARG DEV=false
 RUN python -m venv /py && \
     # Installes the latest version of pip in this env
     /py/bin/pip install --upgrade pip && \
+    # Add some dependencies in order to install psycopg2 package. This is a client package to enable psycopg2 to connect to postgresql.
+    apk add --update --no-cache postgresql-client && \
+    # Group these packages and call them tmp-build-deps, so that we can remove them together. These are virtual packages.
+    apk add --update --no-cache --virtual .tmp-build-deps \
+        build-base postgresql-dev musl-dev && \
     # Install the requirement file in the env
     /py/bin/pip install -r /tmp/requirements.txt && \
     # It is a shell statement. This will install requirements.dev.txt in the developement mode, which is not necessary while deploying the project on the server
@@ -26,6 +31,8 @@ RUN python -m venv /py && \
     fi && \
     # Remove the tmp directory as we do not need it anymore, so that the image will be as lightweight as possible
     rm -rf /tmp && \
+    # Remove tmp-build-deps to keep the image as lightweight as possible. There won't be any excess packages while running, that are not needed to run the application.
+    apk del .tmp-build-deps && \
     # Add new user (other than the root user) to prevent them having access to all privileges
     adduser \
         # No password is needed for users to use the application
