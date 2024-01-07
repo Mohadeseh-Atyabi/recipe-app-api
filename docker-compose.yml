@@ -30,6 +30,8 @@ services:
       - DB_USER=devuser
       - DB_PASS=changeme
     # This determines that the app depends on db and it starts after the db has started earlier. Moreover, if db stops working, docker-compose undrestands that the app will stop working soon, so it shuts down the service as well.
+    depends_on:
+      - db
   
   # Define the database service
   db:

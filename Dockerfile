@@ -1,4 +1,4 @@
-FROM python:3.10-alpine3.19
+FROM python:3.9-alpine3.18
 LABEL maintainer="Mohadeseh Atyabi"
 
 # Print outputs of the running App on the console
